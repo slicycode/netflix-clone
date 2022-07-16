@@ -4,6 +4,10 @@ import Header from "../components/Header"
 import Row from "../components/Row"
 import { Movie } from "../typings"
 import requests from "../utils/requests"
+import useAuth from "../hooks/useAuth"
+import { useRecoilValue } from "recoil"
+import { modalState } from "../atoms/modalAtom"
+import Modal from "../components/Modal"
 
 interface Props {
   netflixOriginals: Movie[]
@@ -26,6 +30,13 @@ const Home = ({
   topRated,
   trendingNow,
 }: Props) => {
+  const { loading } = useAuth()
+  const showModal = useRecoilValue(modalState)
+
+  if (loading) {
+    return null
+  }
+
   return (
     <div className='relative bg-gradient-to-b overflow-x-hidden'>
       <Head>
@@ -46,7 +57,7 @@ const Home = ({
           <Row title='Documentaries' movies={documentaries} />
         </section>
       </main>
-      {/* Modal */}
+      {showModal && <Modal />}
     </div>
   )
 }
